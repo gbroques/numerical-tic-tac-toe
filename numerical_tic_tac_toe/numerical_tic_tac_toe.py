@@ -1,5 +1,6 @@
 from adversarial_search import Game
-from .state import State
+from adversarial_search import Max
+from .game_state import GameState
 
 DIMENSION = 4
 
@@ -9,9 +10,15 @@ class NumericalTicTacToe(Game):
         initial_state = self.get_initial_state()
         super().__init__(initial_state)
 
+    @classmethod
+    def get_initial_state(cls):
+        board = cls.get_initial_board()
+        initial_player = Max
+        return GameState(board, initial_player)
+
     @staticmethod
-    def get_initial_state():
-        return State([[0] * DIMENSION for _ in range(DIMENSION)])
+    def get_initial_board():
+        return [[0] * DIMENSION for _ in range(DIMENSION)]
 
     def player(self, state):
         super().player(state)
