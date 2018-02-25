@@ -5,12 +5,14 @@ class Player(ABC):
     def __init__(self, name):
         self.name = name
 
+    @staticmethod
     @abstractmethod
-    def is_max(self):
+    def is_max():
         """Return True if player is Max."""
 
+    @staticmethod
     @abstractmethod
-    def is_min(self):
+    def is_min():
         """Return True if player is Min."""
 
     def __str__(self):
@@ -24,10 +26,12 @@ class Max(Player):
     def __init__(self):
         super(Max, self).__init__(self.__class__.__name__)
 
-    def is_max(self):
+    @staticmethod
+    def is_max():
         return True
 
-    def is_min(self):
+    @staticmethod
+    def is_min():
         return False
 
 
@@ -35,8 +39,10 @@ class Min(Player):
     def __init__(self):
         super(Min, self).__init__(self.__class__.__name__)
 
-    def is_max(self):
+    @staticmethod
+    def is_max():
         return False
 
-    def is_min(self):
+    @staticmethod
+    def is_min():
         return True
