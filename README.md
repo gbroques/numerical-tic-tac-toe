@@ -17,3 +17,8 @@ There's two ways to play:
 
 2. The computer plays itself, talking alternating moves, allowing a human to watch by pressing a key to continue for each successive move.
 
+
+## References
+
+***Artificial Intelligence: A Modern Approach* (AIMA)** (3rd Edition) by Stuart J. Russel and Peter Norvig
+Section 5.2 Optimal Decisions in Games
