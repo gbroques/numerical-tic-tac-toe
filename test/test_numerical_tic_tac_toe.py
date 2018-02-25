@@ -20,6 +20,12 @@ class TestNumericalTicTacToe(unittest.TestCase):
         game = NumericalTicTacToe()
         self.assertEqual(expected_initial_state, game.get_initial_state())
 
+    def test_player(self):
+        expected_player = Max
+        game = NumericalTicTacToe()
+        state = game.get_initial_state()
+        self.assertEqual(expected_player, game.player(state))
+
 
 if __name__ == '__main__':
     unittest.main()

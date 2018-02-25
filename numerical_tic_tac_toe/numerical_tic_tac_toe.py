@@ -21,7 +21,7 @@ class NumericalTicTacToe(Game):
         return [[0] * DIMENSION for _ in range(DIMENSION)]
 
     def player(self, state):
-        super().player(state)
+        return state.current_player
 
     def actions(self, state):
         super().actions(state)
