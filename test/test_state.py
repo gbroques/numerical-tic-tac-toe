@@ -1,7 +1,7 @@
 import unittest
 
-from adversarial_search import Max
 from numerical_tic_tac_toe import GameState
+from numerical_tic_tac_toe import Max
 
 
 class TestGameState(unittest.TestCase):
@@ -12,7 +12,7 @@ class TestGameState(unittest.TestCase):
 
     def test_current_player(self):
         a = GameState([1], Max)
-        self.assertEqual(a.current_player, Max)
+        self.assertEqual(a.player, Max)
 
 
 if __name__ == '__main__':

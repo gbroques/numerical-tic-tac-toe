@@ -1,12 +1,21 @@
 class GameState:
-    def __init__(self, board, current_player):
+    def __init__(self, board, player):
         """A class to represent the game's state.
 
-        :param board: 4x4 dimensional list.
-        :param current_player: The current player to make a move.
+        :param board: List of coordinates [(0, 0), ..., (3, 3)].
+        :param player: The current player to make a move.
         """
         self.board = board
-        self.current_player = current_player
+        self.player = player
+
+    @property
+    def empty_spots(self):
+        return [k for k, v in self.board.items() if v == 0]
+
+    @property
+    def available_numbers(self):
+        possible_numbers = self.player.possible_numbers()
+        return list(filter(lambda n: n not in self.board.values(), possible_numbers))
 
     def __eq__(self, other):
         return self.board == other.board

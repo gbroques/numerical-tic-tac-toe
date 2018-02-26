@@ -1,11 +1,11 @@
 class Action:
-    def __init__(self, coordinate, value):
+    def __init__(self, coordinate, number):
         self.coordinate = coordinate
-        self.value = value
+        self.number = number
 
     def __repr__(self):
-        return '<Action ({}, {})>'.format(self.coordinate, self.value)
+        return '<Action ({}, {})>'.format(self.coordinate, self.number)
 
     def __eq__(self, other):
         return (self.coordinate == other.coordinate and
-                self.value == other.value)
+                self.number == other.number)

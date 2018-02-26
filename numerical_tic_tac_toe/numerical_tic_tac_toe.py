@@ -1,9 +1,10 @@
 from itertools import product
 
 from adversarial_search import Game
-from adversarial_search import Max
 from .action import Action
 from .game_state import GameState
+from .player import Max
+from .player import Min
 
 DIMENSION = 4
 
@@ -33,33 +34,32 @@ class NumericalTicTacToe(Game):
         return list(product(range(DIMENSION), repeat=2))
 
     def player(self, state):
-        return state.current_player
+        return state.player
 
     def actions(self, state):
-        super().actions(state)
+        return [Action(c, n) for c in state.empty_spots for n in state.available_numbers]
 
     @classmethod
     def possible_actions(cls, player):
         """Return a player's possible actions.
 
-        Possibles actions are a list of tuples in the form of ((x,  y), value),
-        where (x, y) is a board position, and value is the numerical move.
+        Possibles actions are a list of tuples in the form of ((x,  y), number),
+        where (x, y) is a board position, and number is the numerical move.
         :param player:
-        :return: Possible actions.
+        :return: List of possible actions.
         """
         coordinates = cls.get_board_coordinates()
-        return [Action(c, v) for v in cls.possible_values(player) for c in coordinates]
-
-    @staticmethod
-    def possible_values(player):
-        """Return a player's possible values."""
-        if player.is_max():
-            return {1, 3, 5, 7, 9, 11, 13, 15}
-        else:
-            return {2, 4, 6, 8, 10, 12, 14, 16}
+        return [Action(c, v) for v in player.possible_numbers() for c in coordinates]
 
     def result(self, state, action):
-        super().result(state, action)
+        if action.coordinate not in state.empty_spots:
+            return state  # Illegal move has no effect
+        board = state.board.copy()
+        board[action.coordinate] = action.number
+        available_numbers = state.player.available_numbers
+        available_numbers.pop(available_numbers.index(action.number))
+        next_player = Max if state.player.is_min() else Min
+        return GameState(board, next_player)
 
     def terminal_test(self, state):
         super().terminal_test(state)
