@@ -1,6 +1,6 @@
 # Numerical Tic-tac-toe
 
-A numerical tic-tac-toe player written in Python 3 with a 4x4 board.
+A numerical tic-tac-toe player written in Python 3 with a 4 x 4 board.
 
 Numerical tic-tac-toe is similar to normal tic-tac-toe, except instead of X's and O's, the two players are given the numbers:
 
@@ -9,7 +9,7 @@ Numerical tic-tac-toe is similar to normal tic-tac-toe, except instead of X's an
 
 Respectively.
 
-The players take turns (the odd player goes first) and each round a player puts one unused numbers on an open spot on the board. The goal is to have 4 numbers in a line sum to 34 (the average of te numbers 1 - 16).
+The players take turns (the odd player goes first) and each round a player puts one unused number on an open spot on the board. The goal is to have 4 numbers in a line sum to 34 (the average of te numbers 1 - 16).
 
 There's two ways to play:
 
@@ -21,6 +21,7 @@ There's two ways to play:
 ## References
 
 ***Artificial Intelligence: A Modern Approach* (AIMA)** (3rd Edition) by Stuart J. Russel and Peter Norvig
+
 Section 5.2 Optimal Decisions in Games
 
 https://github.com/aimacode/aima-python/blob/master/games.py
