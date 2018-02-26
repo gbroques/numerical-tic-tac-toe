@@ -22,3 +22,5 @@ There's two ways to play:
 
 ***Artificial Intelligence: A Modern Approach* (AIMA)** (3rd Edition) by Stuart J. Russel and Peter Norvig
 Section 5.2 Optimal Decisions in Games
+
+https://github.com/aimacode/aima-python/blob/master/games.py
