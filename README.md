@@ -1,5 +1,7 @@
 # Numerical Tic-tac-toe
 
+[![Build Status](https://travis-ci.org/gbroques/numerical-tic-tac-toe.svg?branch=master)](https://travis-ci.org/gbroques/numerical-tic-tac-toe)
+
 A numerical tic-tac-toe player written in Python 3 with a 4 x 4 board.
 
 Numerical tic-tac-toe is similar to normal tic-tac-toe, except instead of X's and O's, the two players are given the numbers:
