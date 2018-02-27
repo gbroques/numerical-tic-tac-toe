@@ -34,3 +34,11 @@ class Game(ABC):
     @abstractmethod
     def utility(self, state, player):
         """Defines the numerical value for a game that ends in the given state for the given player."""
+
+    @staticmethod
+    def display(state):
+        """Print or otherwise display the state."""
+        print(state)
+
+    def __repr__(self):
+        return '<{}>'.format(self.__class__.__name__)

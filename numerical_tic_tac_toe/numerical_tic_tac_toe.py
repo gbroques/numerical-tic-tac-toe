@@ -56,8 +56,8 @@ class NumericalTicTacToe(Game):
         return GameState(board, next_player)
 
     def terminal_test(self, state):
-        next_player = Max if state.player == Min else Max
-        return self.utility(state, next_player) != 0 or state.is_board_empty()
+        prev_player = Max if state.player.is_min() else Max
+        return self.utility(state, prev_player) != 0 or state.is_board_empty()
 
     def utility(self, state, player):
         if self.is_win(state.board):

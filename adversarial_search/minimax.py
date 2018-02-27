@@ -7,7 +7,7 @@ infinity = float('inf')
 
 def minimax_decision(state, game):
     """Given a state in a game, calculate the best move by searching
-    forward all the way to the terminal state.s"""
+    forward all the way to the terminal state."""
 
     player = game.player(state)
 
@@ -28,4 +28,4 @@ def minimax_decision(state, game):
         return v
 
     return max(game.actions(state),
-               key=lambda a: min_value(game.result((state, a))))
+               key=lambda a: min_value(game.result(state, a)))
