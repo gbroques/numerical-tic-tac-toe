@@ -18,4 +18,5 @@ class GameState:
         return list(filter(lambda n: n not in self.board.values(), possible_numbers))
 
     def __eq__(self, other):
-        return self.board == other.board
+        return (self.board == other.board and
+                self.player == self.player)

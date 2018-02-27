@@ -82,6 +82,24 @@ class TestNumericalTicTacToe(unittest.TestCase):
 
         self.assertEqual(expected_actions, actions)
 
+    def test_result(self):
+        expected_next_state = self.get_expected_next_state()
+        nearly_complete_board = get_nearly_complete_board()
+        state = GameState(nearly_complete_board, Max)
+        game = NumericalTicTacToe()
+        next_state = game.result(state, Action((1, 0), 3))
+
+        self.assertEqual(expected_next_state, next_state)
+
+    @staticmethod
+    def get_expected_next_state():
+        board = {(0, 0): 10, (0, 1): 16, (0, 2): 12, (0, 3): 6,
+                 (1, 0): 3, (1, 1): 13, (1, 2): 11, (1, 3): 14,
+                 (2, 0): 1, (2, 1): 9, (2, 2): 15, (2, 3): 0,
+                 (3, 0): 5, (3, 1): 4, (3, 2): 7, (3, 3): 8}
+        player = Min
+        return GameState(board, player)
+
 
 def get_nearly_complete_board():
     return {(0, 0): 10, (0, 1): 16, (0, 2): 12, (0, 3): 6,

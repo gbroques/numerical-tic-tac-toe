@@ -56,8 +56,6 @@ class NumericalTicTacToe(Game):
             return state  # Illegal move has no effect
         board = state.board.copy()
         board[action.coordinate] = action.number
-        available_numbers = state.player.available_numbers
-        available_numbers.pop(available_numbers.index(action.number))
         next_player = Max if state.player.is_min() else Min
         return GameState(board, next_player)
 
