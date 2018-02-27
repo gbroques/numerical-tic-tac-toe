@@ -12,6 +12,9 @@ class GameState:
     def empty_spots(self):
         return [k for k, v in self.board.items() if v == 0]
 
+    def is_board_empty(self):
+        return len(self.empty_spots) == 0
+
     @property
     def available_numbers(self):
         possible_numbers = self.player.possible_numbers()

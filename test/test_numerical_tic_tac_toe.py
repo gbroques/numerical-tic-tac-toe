@@ -120,6 +120,73 @@ class TestNumericalTicTacToe(unittest.TestCase):
         self.assertTrue(game.is_win(horizontal_win))
         self.assertTrue(game.is_win(diagonal_win))
 
+    def test_utility_with_full_board(self):
+        expected_utility = 0
+        full_board = {(0, 0): 10, (0, 1): 16, (0, 2): 12, (0, 3): 6,
+                      (1, 0): 3, (1, 1): 13, (1, 2): 11, (1, 3): 14,
+                      (2, 0): 1, (2, 1): 9, (2, 2): 15, (2, 3): 2,
+                      (3, 0): 5, (3, 1): 4, (3, 2): 7, (3, 3): 8}
+
+        game = NumericalTicTacToe()
+        utility = game.utility(GameState(full_board, Min), Max)
+
+        self.assertEqual(expected_utility, utility)
+
+    def test_utility_with_max_winning(self):
+        expected_utility = 1
+
+        winning_board = {(0, 0): 10, (0, 1): 16, (0, 2): 12, (0, 3): 6,
+                         (1, 0): 3, (1, 1): 11, (1, 2): 13, (1, 3): 0,
+                         (2, 0): 0, (2, 1): 9, (2, 2): 5, (2, 3): 2,
+                         (3, 0): 15, (3, 1): 7, (3, 2): 4, (3, 3): 8}
+        game = NumericalTicTacToe()
+        utility = game.utility(GameState(winning_board, Min), Max)
+
+        self.assertEqual(expected_utility, utility)
+
+    def test_utility_with_min_winning(self):
+        expected_utility = -1
+
+        winning_board = {(0, 0): 0, (0, 1): 0, (0, 2): 12, (0, 3): 0,
+                         (1, 0): 0, (1, 1): 0, (1, 2): 13, (1, 3): 0,
+                         (2, 0): 0, (2, 1): 0, (2, 2): 5, (2, 3): 0,
+                         (3, 0): 0, (3, 1): 0, (3, 2): 4, (3, 3): 0}
+        game = NumericalTicTacToe()
+        utility = game.utility(GameState(winning_board, Max), Min)
+
+        self.assertEqual(expected_utility, utility)
+
+    def test_terminal_state_with_full_board(self):
+        full_board = {(0, 0): 10, (0, 1): 16, (0, 2): 12, (0, 3): 6,
+                      (1, 0): 3, (1, 1): 13, (1, 2): 11, (1, 3): 14,
+                      (2, 0): 1, (2, 1): 9, (2, 2): 15, (2, 3): 2,
+                      (3, 0): 5, (3, 1): 4, (3, 2): 7, (3, 3): 8}
+
+        game = NumericalTicTacToe()
+        is_over = game.terminal_test(GameState(full_board, Min))
+
+        self.assertTrue(is_over)
+
+    def test_terminal_test_with_max_winning(self):
+        winning_board = {(0, 0): 10, (0, 1): 16, (0, 2): 12, (0, 3): 6,
+                         (1, 0): 3, (1, 1): 11, (1, 2): 13, (1, 3): 0,
+                         (2, 0): 0, (2, 1): 9, (2, 2): 5, (2, 3): 2,
+                         (3, 0): 15, (3, 1): 7, (3, 2): 4, (3, 3): 8}
+        game = NumericalTicTacToe()
+        is_over = game.terminal_test(GameState(winning_board, Min))
+
+        self.assertTrue(is_over)
+
+    def test_terminal_test_with_min_winning(self):
+        winning_board = {(0, 0): 0, (0, 1): 0, (0, 2): 12, (0, 3): 0,
+                         (1, 0): 0, (1, 1): 0, (1, 2): 13, (1, 3): 0,
+                         (2, 0): 0, (2, 1): 0, (2, 2): 5, (2, 3): 0,
+                         (3, 0): 0, (3, 1): 0, (3, 2): 4, (3, 3): 0}
+        game = NumericalTicTacToe()
+        is_over = game.terminal_test(GameState(winning_board, Max))
+
+        self.assertTrue(is_over)
+
 
 def get_nearly_complete_board():
     return {(0, 0): 10, (0, 1): 16, (0, 2): 12, (0, 3): 6,
