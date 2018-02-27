@@ -8,8 +8,9 @@ from .player import Min
 
 
 class NumericalTicTacToe(Game):
-    def __init__(self, dimension=4):
+    def __init__(self, dimension=4, winning_sum=34):
         self.dimension = dimension
+        self.winning_sum = winning_sum
         initial_state = self.get_initial_state()
         super().__init__(initial_state)
 
@@ -61,17 +62,16 @@ class NumericalTicTacToe(Game):
         super().utility(state, player)
 
     def is_won(self, board):
-        winning_sum = 34
         numbers = list(board.values())  # Get two-dimensional board
         matrix = [numbers[i: i + self.dimension] for i in range(0, len(numbers), self.dimension)]
 
-        if self.is_horizontal_win(matrix, winning_sum):
+        if self.is_horizontal_win(matrix, self.winning_sum):
             return True
 
-        if self.is_vertical_win(matrix, winning_sum):
+        if self.is_vertical_win(matrix, self.winning_sum):
             return True
 
-        if self.is_diagonal_win(matrix, winning_sum):
+        if self.is_diagonal_win(matrix, self.winning_sum):
             return True
 
         return False
