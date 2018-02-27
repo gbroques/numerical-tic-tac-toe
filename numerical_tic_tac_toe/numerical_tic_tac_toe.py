@@ -1,4 +1,5 @@
 from itertools import product
+from math import pow
 
 from adversarial_search import Game
 from .action import Action
@@ -30,11 +31,19 @@ class NumericalTicTacToe(Game):
         """
         return list(product(range(self.dimension), repeat=2))
 
+    def map_position_to_coordinate(self, position):
+        coordinates = self.get_board_coordinates()
+        return coordinates[position]
+
     def player(self, state):
         return state.player
 
     def actions(self, state):
-        return [Action(c, n) for c in state.empty_spots for n in state.available_numbers]
+        return [Action(c, n) for c in state.empty_spots for n in self.available_numbers(state)]
+
+    def available_numbers(self, state):
+        possible_numbers = self.possible_numbers(state.player)
+        return list(filter(lambda n: n not in state.board.values(), possible_numbers))
 
     def possible_actions(self, player):
         """Return a player's possible actions.
@@ -45,7 +54,17 @@ class NumericalTicTacToe(Game):
         :return: List of possible actions.
         """
         coordinates = self.get_board_coordinates()
-        return [Action(c, v) for v in player.possible_numbers() for c in coordinates]
+        return [Action(c, v) for v in self.possible_numbers(player) for c in coordinates]
+
+    def possible_numbers(self, player):
+        start = 1 if player.is_max() else 2
+        num_tiles = int(pow(self.dimension, 2))
+        possible_numbers = list(range(start, num_tiles + 1, 2))
+        # Remove 5 in {1, 3, 5, 7, 9} for 3 x 3 game to match {2, 4, 6, 8}
+        if player.is_max() and len(possible_numbers) > pow(2, self.dimension - 1):
+            middle_index = len(possible_numbers) // 2
+            possible_numbers.remove(possible_numbers[middle_index])
+        return set(possible_numbers)
 
     def result(self, state, action):
         if action.coordinate not in state.empty_spots:

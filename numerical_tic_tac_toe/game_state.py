@@ -1,5 +1,6 @@
 from math import sqrt
 
+
 class GameState:
     def __init__(self, board, player):
         """A class to represent the game's state.
@@ -16,11 +17,6 @@ class GameState:
 
     def is_board_empty(self):
         return len(self.empty_spots) == 0
-
-    @property
-    def available_numbers(self):
-        possible_numbers = self.player.possible_numbers()
-        return list(filter(lambda n: n not in self.board.values(), possible_numbers))
 
     def __eq__(self, other):
         return (self.board == other.board and

@@ -187,6 +187,48 @@ class TestNumericalTicTacToe(unittest.TestCase):
 
         self.assertTrue(is_over)
 
+    def test_get_possible_numbers_for_dimension_two(self):
+        expected_possible_numbers_for_max = {1, 3}
+        expected_possible_numbers_for_min = {2, 4}
+        game = NumericalTicTacToe(dimension=2, winning_sum=5)
+
+        possible_numbers_for_max = game.possible_numbers(Max)
+        possible_numbers_for_min = game.possible_numbers(Min)
+
+        self.assertEqual(expected_possible_numbers_for_max, possible_numbers_for_max)
+        self.assertEqual(expected_possible_numbers_for_min, possible_numbers_for_min)
+
+    def test_get_possible_numbers_for_dimension_three(self):
+        expected_possible_numbers_for_max = {1, 3, 7, 9}
+        expected_possible_numbers_for_min = {2, 4, 6, 8}
+        game = NumericalTicTacToe(dimension=3, winning_sum=15)
+
+        possible_numbers_for_max = game.possible_numbers(Max)
+        possible_numbers_for_min = game.possible_numbers(Min)
+
+        self.assertEqual(expected_possible_numbers_for_max, possible_numbers_for_max)
+        self.assertEqual(expected_possible_numbers_for_min, possible_numbers_for_min)
+
+    def test_get_possible_numbers_for_dimension_four(self):
+        expected_possible_numbers_for_max = {1, 3, 5, 7, 9, 11, 13, 15}
+        expected_possible_numbers_for_min = {2, 4, 6, 8, 10, 12, 14, 16}
+        game = NumericalTicTacToe(dimension=4, winning_sum=34)
+
+        possible_numbers_for_max = game.possible_numbers(Max)
+        possible_numbers_for_min = game.possible_numbers(Min)
+
+        self.assertEqual(expected_possible_numbers_for_max, possible_numbers_for_max)
+        self.assertEqual(expected_possible_numbers_for_min, possible_numbers_for_min)
+
+    def test_available_numbers(self):
+        expected_available_numbers = [3]
+
+        board = get_nearly_complete_board()
+        state = GameState(board, Max)
+        game = NumericalTicTacToe()
+
+        self.assertEqual(expected_available_numbers, game.available_numbers(state))
+
 
 def get_nearly_complete_board():
     return {(0, 0): 10, (0, 1): 16, (0, 2): 12, (0, 3): 6,
