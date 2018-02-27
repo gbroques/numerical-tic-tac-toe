@@ -6,32 +6,28 @@ from .game_state import GameState
 from .player import Max
 from .player import Min
 
-DIMENSION = 4
-
 
 class NumericalTicTacToe(Game):
-    def __init__(self):
+    def __init__(self, dimension=4):
+        self.dimension = dimension
         initial_state = self.get_initial_state()
         super().__init__(initial_state)
 
-    @classmethod
-    def get_initial_state(cls):
-        board = cls.get_initial_board()
+    def get_initial_state(self):
+        board = self.get_initial_board()
         initial_player = Max
         return GameState(board, initial_player)
 
-    @classmethod
-    def get_initial_board(cls):
-        coordinates = cls.get_board_coordinates()
+    def get_initial_board(self):
+        coordinates = self.get_board_coordinates()
         return {coordinate: 0 for coordinate in coordinates}
 
-    @staticmethod
-    def get_board_coordinates():
+    def get_board_coordinates(self):
         """Get a list of tuples representing board coordinates.
 
         [(0, 0), (0, 1), (0, 2), ..., (3, 1), (3, 2), (3, 3)]
         """
-        return list(product(range(DIMENSION), repeat=2))
+        return list(product(range(self.dimension), repeat=2))
 
     def player(self, state):
         return state.player
@@ -39,8 +35,7 @@ class NumericalTicTacToe(Game):
     def actions(self, state):
         return [Action(c, n) for c in state.empty_spots for n in state.available_numbers]
 
-    @classmethod
-    def possible_actions(cls, player):
+    def possible_actions(self, player):
         """Return a player's possible actions.
 
         Possibles actions are a list of tuples in the form of ((x,  y), number),
@@ -48,7 +43,7 @@ class NumericalTicTacToe(Game):
         :param player:
         :return: List of possible actions.
         """
-        coordinates = cls.get_board_coordinates()
+        coordinates = self.get_board_coordinates()
         return [Action(c, v) for v in player.possible_numbers() for c in coordinates]
 
     def result(self, state, action):
@@ -65,19 +60,18 @@ class NumericalTicTacToe(Game):
     def utility(self, state, player):
         super().utility(state, player)
 
-    @classmethod
-    def is_won(cls, board):
+    def is_won(self, board):
         winning_sum = 34
         numbers = list(board.values())  # Get two-dimensional board
-        matrix = [numbers[i: i + DIMENSION] for i in range(0, len(numbers), DIMENSION)]
+        matrix = [numbers[i: i + self.dimension] for i in range(0, len(numbers), self.dimension)]
 
-        if cls.is_horizontal_win(matrix, winning_sum):
+        if self.is_horizontal_win(matrix, winning_sum):
             return True
 
-        if cls.is_vertical_win(matrix, winning_sum):
+        if self.is_vertical_win(matrix, winning_sum):
             return True
 
-        if cls.is_diagonal_win(matrix, winning_sum):
+        if self.is_diagonal_win(matrix, winning_sum):
             return True
 
         return False
