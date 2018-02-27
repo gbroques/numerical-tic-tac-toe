@@ -64,3 +64,45 @@ class NumericalTicTacToe(Game):
 
     def utility(self, state, player):
         super().utility(state, player)
+
+    @classmethod
+    def is_won(cls, board):
+        winning_sum = 34
+        numbers = list(board.values())  # Get two-dimensional board
+        matrix = [numbers[i: i + DIMENSION] for i in range(0, len(numbers), DIMENSION)]
+
+        if cls.is_horizontal_win(matrix, winning_sum):
+            return True
+
+        if cls.is_vertical_win(matrix, winning_sum):
+            return True
+
+        if cls.is_diagonal_win(matrix, winning_sum):
+            return True
+
+        return False
+
+    @staticmethod
+    def is_horizontal_win(matrix, winning_sum):
+        count = 0
+        for i in range(len(matrix)):
+            for j in range(len(matrix[i])):
+                count += matrix[i][j]
+                if count == winning_sum:
+                    return True
+            count = 0
+        return False
+
+    @classmethod
+    def is_vertical_win(cls, matrix, winning_sum):
+        transpose = list(zip(*matrix))
+        return cls.is_horizontal_win(transpose, winning_sum)
+
+    @staticmethod
+    def is_diagonal_win(matrix, winning_sum):
+        count = 0
+        for i in range(len(matrix)):
+            count += matrix[i][i]
+            if count == winning_sum:
+                return True
+        return False

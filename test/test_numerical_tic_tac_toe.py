@@ -100,6 +100,26 @@ class TestNumericalTicTacToe(unittest.TestCase):
         player = Min
         return GameState(board, player)
 
+    def test_is_won(self):
+        vertical_win = {(0, 0): 0, (0, 1): 0, (0, 2): 12, (0, 3): 0,
+                        (1, 0): 0, (1, 1): 0, (1, 2): 13, (1, 3): 0,
+                        (2, 0): 0, (2, 1): 15, (2, 2): 5, (2, 3): 0,
+                        (3, 0): 0, (3, 1): 0, (3, 2): 4, (3, 3): 0}
+
+        horizontal_win = {(0, 0): 0, (0, 1): 0, (0, 2): 7, (0, 3): 0,
+                          (1, 0): 12, (1, 1): 5, (1, 2): 4, (1, 3): 13,
+                          (2, 0): 0, (2, 1): 0, (2, 2): 0, (2, 3): 0,
+                          (3, 0): 0, (3, 1): 0, (3, 2): 0, (3, 3): 0}
+
+        diagonal_win = {(0, 0): 12, (0, 1): 0, (0, 2): 0, (0, 3): 15,
+                        (1, 0): 0, (1, 1): 5, (1, 2): 0, (1, 3): 0,
+                        (2, 0): 0, (2, 1): 0, (2, 2): 4, (2, 3): 0,
+                        (3, 0): 0, (3, 1): 0, (3, 2): 0, (3, 3): 13}
+        game = NumericalTicTacToe()
+        self.assertTrue(game.is_won(vertical_win))
+        self.assertTrue(game.is_won(horizontal_win))
+        self.assertTrue(game.is_won(diagonal_win))
+
 
 def get_nearly_complete_board():
     return {(0, 0): 10, (0, 1): 16, (0, 2): 12, (0, 3): 6,
