@@ -62,6 +62,20 @@ class TestNumericalTicTacToe(unittest.TestCase):
         self.assertNotIn(Action((4, 0), 8), possible_actions)
         self.assertNotIn(Action((3, 0), 1), possible_actions)
 
+    def test_possible_actions_for_min_with_dimension_two(self):
+        expected_num_actions = 8
+
+        game = NumericalTicTacToe(dimension=2)
+        possible_actions = game.possible_actions(Min)
+
+        self.assertEqual(expected_num_actions, len(possible_actions))
+        self.assertIn(Action((0, 1), 4), possible_actions)
+        self.assertIn(Action((1, 0), 2), possible_actions)
+        self.assertIn(Action((1, 1), 4), possible_actions)
+        self.assertNotIn(Action((-1, 0), 1), possible_actions)
+        self.assertNotIn(Action((0, 0), 1), possible_actions)
+        self.assertNotIn(Action((3, 0), 1), possible_actions)
+
     def test_actions_for_max(self):
         expected_actions = [Action((1, 0), 3), Action((2, 3), 3)]
         nearly_complete_board = get_nearly_complete_board()
