@@ -9,9 +9,8 @@ from .player import Min
 
 
 class NumericalTicTacToe(Game):
-    def __init__(self, dimension=4, winning_sum=34):
+    def __init__(self, dimension=4):
         self.dimension = dimension
-        self.winning_sum = winning_sum
         initial_state = self.get_initial_state()
         super().__init__(initial_state)
 
@@ -126,3 +125,9 @@ class NumericalTicTacToe(Game):
             if count == winning_sum:
                 return True
         return False
+
+    @property
+    def winning_sum(self):
+        numbers = list(range(1, int(pow(self.dimension, 2)) + 1))
+        mean = sum(numbers) / len(numbers)
+        return mean * self.dimension

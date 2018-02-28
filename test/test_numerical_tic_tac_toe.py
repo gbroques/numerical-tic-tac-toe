@@ -190,7 +190,7 @@ class TestNumericalTicTacToe(unittest.TestCase):
     def test_get_possible_numbers_for_dimension_two(self):
         expected_possible_numbers_for_max = {1, 3}
         expected_possible_numbers_for_min = {2, 4}
-        game = NumericalTicTacToe(dimension=2, winning_sum=5)
+        game = NumericalTicTacToe(dimension=2)
 
         possible_numbers_for_max = game.possible_numbers(Max)
         possible_numbers_for_min = game.possible_numbers(Min)
@@ -201,7 +201,7 @@ class TestNumericalTicTacToe(unittest.TestCase):
     def test_get_possible_numbers_for_dimension_three(self):
         expected_possible_numbers_for_max = {1, 3, 7, 9}
         expected_possible_numbers_for_min = {2, 4, 6, 8}
-        game = NumericalTicTacToe(dimension=3, winning_sum=15)
+        game = NumericalTicTacToe(dimension=3)
 
         possible_numbers_for_max = game.possible_numbers(Max)
         possible_numbers_for_min = game.possible_numbers(Min)
@@ -212,7 +212,7 @@ class TestNumericalTicTacToe(unittest.TestCase):
     def test_get_possible_numbers_for_dimension_four(self):
         expected_possible_numbers_for_max = {1, 3, 5, 7, 9, 11, 13, 15}
         expected_possible_numbers_for_min = {2, 4, 6, 8, 10, 12, 14, 16}
-        game = NumericalTicTacToe(dimension=4, winning_sum=34)
+        game = NumericalTicTacToe(dimension=4)
 
         possible_numbers_for_max = game.possible_numbers(Max)
         possible_numbers_for_min = game.possible_numbers(Min)
@@ -228,6 +228,21 @@ class TestNumericalTicTacToe(unittest.TestCase):
         game = NumericalTicTacToe()
 
         self.assertEqual(expected_available_numbers, game.available_numbers(state))
+
+    def test_winning_sum_for_dimension_two(self):
+        expected_winning_sum = 5
+        game = NumericalTicTacToe(dimension=2)
+        self.assertEqual(expected_winning_sum, game.winning_sum)
+
+    def test_winning_sum_for_dimension_three(self):
+        expected_winning_sum = 15
+        game = NumericalTicTacToe(dimension=3)
+        self.assertEqual(expected_winning_sum, game.winning_sum)
+
+    def test_winning_sum_for_dimension_four(self):
+        expected_winning_sum = 34
+        game = NumericalTicTacToe(dimension=4)
+        self.assertEqual(expected_winning_sum, game.winning_sum)
 
 
 def get_nearly_complete_board():
