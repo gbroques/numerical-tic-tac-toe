@@ -16,7 +16,7 @@ from numerical_tic_tac_toe import NumericalTicTacToe
 
 
 def main():
-    game = NumericalTicTacToe(dimension=2, winning_sum=5)
+    game = NumericalTicTacToe(dimension=2)
     players = [Max, Min]
     state = game.initial_state
     print(state)

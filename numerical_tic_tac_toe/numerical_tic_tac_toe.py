@@ -119,12 +119,9 @@ class NumericalTicTacToe(Game):
 
     @staticmethod
     def is_diagonal_win(matrix, winning_sum):
-        count = 0
-        for i in range(len(matrix)):
-            count += matrix[i][i]
-            if count == winning_sum:
-                return True
-        return False
+        sum_of_major_diagonal = sum([matrix[i][i] for i in range(0, len(matrix))])
+        sum_of_minor_diagonal = sum([matrix[i][~i] for i in range(0, len(matrix))])
+        return sum_of_major_diagonal == winning_sum or sum_of_minor_diagonal == winning_sum
 
     @property
     def winning_sum(self):
