@@ -32,7 +32,8 @@ class Minimax:
     @classmethod
     def _max_value(cls, state, game, limit):
         if game.terminal_test(state):
-            return game.utility(state, state.player)
+            player = game.player(state)
+            return game.utility(state, player)
         elif limit == 0 or cls._cutoff:
             minimax_value = max([cls._evaluate(game.result(state, a)) for a in game.actions(state)])
             return minimax_value
@@ -45,7 +46,8 @@ class Minimax:
     @classmethod
     def _min_value(cls, state, game, limit):
         if game.terminal_test(state):
-            return game.utility(state, state.player)
+            player = game.player(state)
+            return game.utility(state, player)
         elif limit == 0 or cls._cutoff:
             minimax_value = min([cls._evaluate(game.result(state, a)) for a in game.actions(state)])
             return minimax_value
