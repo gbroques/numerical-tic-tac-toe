@@ -58,12 +58,7 @@ class NumericalTicTacToe(Game):
     def possible_numbers(self, player):
         start = 1 if player.is_max() else 2
         num_tiles = int(pow(self.dimension, 2))
-        possible_numbers = list(range(start, num_tiles + 1, 2))
-        # Remove 5 in {1, 3, 5, 7, 9} for 3 x 3 game to match {2, 4, 6, 8}
-        if player.is_max() and len(possible_numbers) > pow(2, self.dimension - 1):
-            middle_index = len(possible_numbers) // 2
-            possible_numbers.remove(possible_numbers[middle_index])
-        return set(possible_numbers)
+        return set(range(start, num_tiles + 1, 2))
 
     def result(self, state, action):
         if action.coordinate not in state.empty_spots:

@@ -228,7 +228,7 @@ class TestNumericalTicTacToe(unittest.TestCase):
         self.assertEqual(expected_possible_numbers_for_min, possible_numbers_for_min)
 
     def test_get_possible_numbers_for_dimension_three(self):
-        expected_possible_numbers_for_max = {1, 3, 7, 9}
+        expected_possible_numbers_for_max = {1, 3, 5, 7, 9}
         expected_possible_numbers_for_min = {2, 4, 6, 8}
         game = NumericalTicTacToe(dimension=3)
 
