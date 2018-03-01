@@ -16,7 +16,7 @@ from numerical_tic_tac_toe import NumericalTicTacToe
 
 
 def main():
-    game = NumericalTicTacToe(dimension=2)
+    game = NumericalTicTacToe(dimension=3)
     players = [Max, Min]
     state = game.initial_state
     print(state)
@@ -28,6 +28,7 @@ def main():
                 coordinate = game.map_position_to_coordinate(position)
                 action = Action(coordinate, number)
             else:
+                print("---------")
                 action = minimax_decision(state, game)
             state = game.result(state, action)
             print(state)
