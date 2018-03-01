@@ -8,7 +8,7 @@ Section 5.2 Optimal Decisions in Games
 https://github.com/aimacode/aima-python/blob/master/games.py
 """
 
-from adversarial_search import minimax_decision
+from adversarial_search import Minimax
 from numerical_tic_tac_toe import Action
 from numerical_tic_tac_toe import Max
 from numerical_tic_tac_toe import Min
@@ -28,8 +28,7 @@ def main():
                 coordinate = game.map_position_to_coordinate(position)
                 action = Action(coordinate, number)
             else:
-                print("---------")
-                action = minimax_decision(state, game)
+                action = Minimax.decision(state, game)
             state = game.result(state, action)
             print(state)
             if game.terminal_test(state):

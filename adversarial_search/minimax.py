@@ -7,43 +7,58 @@ https://github.com/aimacode/aima-python/blob/master/games.py
 """
 
 from random import randint
+from threading import Timer
+
+TIME_LIMIT = 60.0  # 1 minutes
 
 infinity = float('inf')
 
 
-def minimax_decision(state, game, limit=2):
-    """Given a state in a game, calculate the best move by searching
-    forward all the way to the terminal state."""
+class Minimax:
+    _cutoff = False
 
-    return max(game.actions(state),
-               key=lambda a: min_value(game.result(state, a), game, limit))
+    @classmethod
+    def decision(cls, state, game, limit=50):
+        """Given a state in a game, calculate the best move by searching
+        forward all the way to the terminal state."""
 
+        print("Deciding on move...")
 
-def max_value(state, game, limit):
-    if game.terminal_test(state):
-        return game.utility(state, state.player)
-    elif limit == 0:
-        minimax_value = max([evaluate(game.result(state, a)) for a in game.actions(state)])
-        return minimax_value
-    else:
-        v = -infinity
-        for a in game.actions(state):
-            v = max(v, min_value(game.result(state, a), game, limit - 1))
-        return v
+        Timer(TIME_LIMIT, cls._set_cutoff).start()
 
+        return max(game.actions(state),
+                   key=lambda a: cls._min_value(game.result(state, a), game, limit))
 
-def min_value(state, game, limit):
-    if game.terminal_test(state):
-        return game.utility(state, state.player)
-    elif limit == 0:
-        minimax_value = min([evaluate(game.result(state, a)) for a in game.actions(state)])
-        return minimax_value
-    else:
-        v = infinity
-        for a in game.actions(state):
-            v = min(v, max_value(game.result(state, a), game, limit - 1))
-        return v
+    @classmethod
+    def _max_value(cls, state, game, limit):
+        if game.terminal_test(state):
+            return game.utility(state, state.player)
+        elif limit == 0 or cls._cutoff:
+            minimax_value = max([cls._evaluate(game.result(state, a)) for a in game.actions(state)])
+            return minimax_value
+        else:
+            v = -infinity
+            for a in game.actions(state):
+                v = max(v, cls._min_value(game.result(state, a), game, limit - 1))
+            return v
 
+    @classmethod
+    def _min_value(cls, state, game, limit):
+        if game.terminal_test(state):
+            return game.utility(state, state.player)
+        elif limit == 0 or cls._cutoff:
+            minimax_value = min([cls._evaluate(game.result(state, a)) for a in game.actions(state)])
+            return minimax_value
+        else:
+            v = infinity
+            for a in game.actions(state):
+                v = min(v, cls._max_value(game.result(state, a), game, limit - 1))
+            return v
 
-def evaluate(state):
-    return randint(0, 9)
+    @classmethod
+    def _evaluate(cls, state):
+        return randint(0, 9)
+
+    @classmethod
+    def _set_cutoff(cls):
+        cls._cutoff = True
