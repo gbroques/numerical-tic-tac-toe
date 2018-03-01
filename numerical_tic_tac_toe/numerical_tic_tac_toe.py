@@ -120,6 +120,5 @@ class NumericalTicTacToe(Game):
 
     @property
     def winning_sum(self):
-        numbers = list(range(1, int(pow(self.dimension, 2)) + 1))
-        mean = sum(numbers) / len(numbers)
-        return mean * self.dimension
+        d = self.dimension
+        return d * (d ** 2 + 1) / 2
