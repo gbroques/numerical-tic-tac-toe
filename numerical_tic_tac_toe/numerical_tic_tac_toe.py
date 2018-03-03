@@ -3,8 +3,8 @@ from math import pow
 from random import randint
 from sys import exit
 
+from adversarial_search import AlphaBetaCutoff
 from adversarial_search import Game
-from adversarial_search import alpha_beta_cutoff_search
 from .action import Action
 from .game_state import GameState
 from .player import Max
@@ -44,7 +44,8 @@ class NumericalTicTacToe(Game):
                 if player.is_max():
                     action = self._get_user_action(state)
                 else:
-                    action = alpha_beta_cutoff_search(state, self, eval_fn=self.evaluate)
+                    action = AlphaBetaCutoff.search(state, self, eval_fn=self.evaluate)
+                    print("=========")
                 state = self.result(state, action)
                 print(state)
                 if self.terminal_test(state):
