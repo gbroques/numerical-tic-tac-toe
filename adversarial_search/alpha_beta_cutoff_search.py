@@ -77,4 +77,5 @@ class AlphaBetaCutoff:
             if v > best_score:
                 best_score = v
                 best_action = a
+        print("Minimax Value: " + str(best_score))
         return best_action

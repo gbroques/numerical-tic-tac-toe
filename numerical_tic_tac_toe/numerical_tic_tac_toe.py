@@ -33,24 +33,33 @@ class NumericalTicTacToe(Game):
         """
         return list(product(range(self.dimension), repeat=2))
 
-    def play(self):
+    def play_human_vs_computer(self):
         state = self.initial_state
         print(state)
-        self._init_game_loop(state)
+        self._init_human_vs_player_loop(state)
 
-    def _init_game_loop(self, state):
+    def _init_human_vs_player_loop(self, state):
+        human_player = self.get_human_player()
         while True:
             for player in self.players():
-                if player.is_max():
+                if player == human_player:
                     action = self._get_user_action(state)
                 else:
                     action = AlphaBetaCutoff.search(state, self, eval_fn=self.evaluate)
-                    print("=========")
                 state = self.result(state, action)
                 print(state)
                 if self.terminal_test(state):
                     print("Game over!")
                     exit(0)
+
+    @staticmethod
+    def get_human_player():
+        go_first = ''
+        while go_first.lower() != 'y' and go_first.lower() != 'n':
+            go_first = input('Would you like to go first? (Y/n) ')
+            if go_first == '':
+                go_first = 'y'
+        return Max if go_first.lower() == 'y' else Min
 
     @staticmethod
     def evaluate(state):
