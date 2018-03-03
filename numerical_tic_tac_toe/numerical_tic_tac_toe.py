@@ -1,8 +1,10 @@
 from itertools import product
 from math import pow
+from random import randint
+from sys import exit
 
 from adversarial_search import Game
-from adversarial_search import Minimax
+from adversarial_search import alpha_beta_cutoff_search
 from .action import Action
 from .game_state import GameState
 from .player import Max
@@ -34,58 +36,71 @@ class NumericalTicTacToe(Game):
     def play(self):
         state = self.initial_state
         print(state)
+        self._init_game_loop(state)
+
+    def _init_game_loop(self, state):
         while True:
             for player in self.players():
                 if player.is_max():
-                    action = self.get_user_action(state)
+                    action = self._get_user_action(state)
                 else:
-                    action = Minimax.decision(state, self)
+                    action = alpha_beta_cutoff_search(state, self, eval_fn=self.evaluate)
                 state = self.result(state, action)
                 print(state)
                 if self.terminal_test(state):
                     print("Game over!")
-                    return self.utility(state, player)
+                    exit(0)
 
-    def get_user_action(self, state):
-        coordinate = self.get_coordinate(state)
-        number = self.get_number(state)
+    @staticmethod
+    def evaluate(state):
+        return randint(0, 9)
+
+    def _get_user_action(self, state):
+        coordinate = self._get_coordinate(state)
+        number = self._get_number(state)
         action = Action(coordinate, number)
         return action
 
-    def get_coordinate(self, state):
+    def _get_coordinate(self, state):
         position = -1
-        positions = [self.map_coordinate_to_position(c) for c in state.empty_spots]
+        positions = [self._map_coordinate_to_position(c) for c in state.empty_spots]
         while position not in positions:
-            position = int(input(self.get_position_prompt(positions)))
-        return self.map_position_to_coordinate(position)
+            try:
+                position = int(input(self._get_position_prompt(positions)))
+            except ValueError:
+                pass
+        return self._map_position_to_coordinate(position)
 
     @classmethod
-    def get_position_prompt(cls, positions):
-        return cls.get_prompt('position', positions)
+    def _get_position_prompt(cls, positions):
+        return cls._get_prompt('position', positions)
 
     @staticmethod
-    def get_prompt(prompt_for, possible_options):
+    def _get_prompt(prompt_for, possible_options):
         options = ', '.join(str(o) for o in possible_options)
         return 'Enter a ' + prompt_for + ' (' + options + '): '
 
-    def map_position_to_coordinate(self, position):
+    def _map_position_to_coordinate(self, position):
         coordinates = self.get_board_coordinates()
         return coordinates[position]
 
-    def map_coordinate_to_position(self, coordinate):
+    def _map_coordinate_to_position(self, coordinate):
         coordinates = self.get_board_coordinates()
         return coordinates.index(coordinate)
 
-    def get_number(self, state):
+    def _get_number(self, state):
         number = -1
         available_numbers = self.available_numbers(state)
         while number not in available_numbers:
-            number = int(input(self.get_number_prompt(available_numbers)))
+            try:
+                number = int(input(self._get_number_prompt(available_numbers)))
+            except ValueError:
+                pass
         return number
 
     @classmethod
-    def get_number_prompt(cls, available_numbers):
-        return cls.get_prompt('number', available_numbers)
+    def _get_number_prompt(cls, available_numbers):
+        return cls._get_prompt('number', available_numbers)
 
     def player(self, state):
         return state.player
@@ -131,7 +146,7 @@ class NumericalTicTacToe(Game):
 
     def utility(self, state, player):
         if self.is_win(state.board):
-            return +1 if player == Max else -1
+            return +1 if player.is_max() else -1
         else:
             return 0
 
@@ -153,27 +168,40 @@ class NumericalTicTacToe(Game):
         numbers = list(board.values())
         return [numbers[i: i + self.dimension] for i in range(0, len(numbers), self.dimension)]
 
-    @staticmethod
-    def is_horizontal_win(matrix, winning_sum):
+    def is_horizontal_win(self, matrix, winning_sum):
         count = 0
+        in_a_row = 0
         for i in range(len(matrix)):
             for j in range(len(matrix[i])):
-                count += matrix[i][j]
-                if count == winning_sum:
+                if matrix[i][j] != 0:
+                    count += matrix[i][j]
+                    in_a_row += 1
+                if count == winning_sum and in_a_row == self.dimension:
                     return True
             count = 0
+            in_a_row = 0
         return False
 
-    @classmethod
-    def is_vertical_win(cls, matrix, winning_sum):
+    def is_vertical_win(self, matrix, winning_sum):
         transpose = list(zip(*matrix))
-        return cls.is_horizontal_win(transpose, winning_sum)
+        return self.is_horizontal_win(transpose, winning_sum)
+
+    def is_diagonal_win(self, matrix, winning_sum):
+        is_major_win = self.is_major_diagonal_win(matrix, winning_sum)
+        is_minor_win = self.is_minor_diagonal_win(matrix, winning_sum)
+        return is_major_win or is_minor_win
 
     @staticmethod
-    def is_diagonal_win(matrix, winning_sum):
-        sum_of_major_diagonal = sum([matrix[i][i] for i in range(0, len(matrix))])
-        sum_of_minor_diagonal = sum([matrix[i][~i] for i in range(0, len(matrix))])
-        return sum_of_major_diagonal == winning_sum or sum_of_minor_diagonal == winning_sum
+    def is_major_diagonal_win(matrix, winning_sum):
+        major_diagonal = [matrix[i][i] for i in range(0, len(matrix))]
+        is_major_non_zero = all(major_diagonal)
+        return sum(major_diagonal) == winning_sum and is_major_non_zero
+
+    @staticmethod
+    def is_minor_diagonal_win(matrix, winning_sum):
+        minor_diagonal = [matrix[i][~i] for i in range(0, len(matrix))]
+        is_minor_non_zero = all(minor_diagonal)
+        return sum(minor_diagonal) == winning_sum and is_minor_non_zero
 
     @property
     def winning_sum(self):

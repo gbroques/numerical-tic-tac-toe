@@ -1,15 +1,15 @@
 import unittest
 
 from adversarial_search import Game
-from adversarial_search import Minimax
+from adversarial_search import alpha_beta_cutoff_search
 
 
-class TestMinimax(unittest.TestCase):
+class TestAlphaBetaCutoffSearch(unittest.TestCase):
     def test_minimax(self):
         expected_decision = 'a1'
 
         game = SimpleGame()
-        decision = Minimax.decision(game.initial_state, game)
+        decision = alpha_beta_cutoff_search(game.initial_state, game)
 
         self.assertEqual(expected_decision, decision)
 

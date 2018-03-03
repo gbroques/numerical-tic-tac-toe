@@ -129,10 +129,23 @@ class TestNumericalTicTacToe(unittest.TestCase):
                               (1, 0): 0, (1, 1): 5, (1, 2): 0, (1, 3): 0,
                               (2, 0): 0, (2, 1): 0, (2, 2): 4, (2, 3): 0,
                               (3, 0): 0, (3, 1): 0, (3, 2): 0, (3, 3): 13}
-        game = NumericalTicTacToe()
+        game = NumericalTicTacToe(dimension=4)
         self.assertTrue(game.is_win(vertical_win))
         self.assertTrue(game.is_win(horizontal_win))
         self.assertTrue(game.is_win(major_diagonal_win))
+
+    def test_is_win_with_dimension_three(self):
+        not_horizontal_win = {(0, 0): 8, (0, 1): 0, (0, 2): 7,
+                              (1, 0): 0, (1, 1): 0, (1, 2): 0,
+                              (2, 0): 0, (2, 1): 0, (2, 2): 0}
+
+        not_diagonal_win = {(0, 0): 8, (0, 1): 0, (0, 2): 0,
+                            (1, 0): 0, (1, 1): 0, (1, 2): 0,
+                            (2, 0): 0, (2, 1): 0, (2, 2): 7}
+        game = NumericalTicTacToe(dimension=3)
+
+        self.assertFalse(game.is_win(not_horizontal_win))
+        self.assertFalse(game.is_win(not_diagonal_win))
 
     def test_is_win_with_dimension_two(self):
         vertical_win = {(0, 0): 2, (0, 1): 3,
