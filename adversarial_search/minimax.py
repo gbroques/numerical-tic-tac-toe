@@ -18,7 +18,7 @@ class Minimax:
     _cutoff = False
 
     @classmethod
-    def decision(cls, state, game, limit=50):
+    def decision(cls, state, game, limit=2):
         """Given a state in a game, calculate the best move by searching
         forward all the way to the terminal state."""
 

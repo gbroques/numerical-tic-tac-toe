@@ -2,6 +2,7 @@ from itertools import product
 from math import pow
 
 from adversarial_search import Game
+from adversarial_search import Minimax
 from .action import Action
 from .game_state import GameState
 from .player import Max
@@ -30,12 +31,68 @@ class NumericalTicTacToe(Game):
         """
         return list(product(range(self.dimension), repeat=2))
 
+    def play(self):
+        state = self.initial_state
+        print(state)
+        while True:
+            for player in self.players():
+                if player.is_max():
+                    action = self.get_user_action(state)
+                else:
+                    action = Minimax.decision(state, self)
+                state = self.result(state, action)
+                print(state)
+                if self.terminal_test(state):
+                    print("Game over!")
+                    return self.utility(state, player)
+
+    def get_user_action(self, state):
+        coordinate = self.get_coordinate(state)
+        number = self.get_number(state)
+        action = Action(coordinate, number)
+        return action
+
+    def get_coordinate(self, state):
+        position = -1
+        positions = [self.map_coordinate_to_position(c) for c in state.empty_spots]
+        while position not in positions:
+            position = int(input(self.get_position_prompt(positions)))
+        return self.map_position_to_coordinate(position)
+
+    @classmethod
+    def get_position_prompt(cls, positions):
+        return cls.get_prompt('position', positions)
+
+    @staticmethod
+    def get_prompt(prompt_for, possible_options):
+        options = ', '.join(str(o) for o in possible_options)
+        return 'Enter a ' + prompt_for + ' (' + options + '): '
+
     def map_position_to_coordinate(self, position):
         coordinates = self.get_board_coordinates()
         return coordinates[position]
 
+    def map_coordinate_to_position(self, coordinate):
+        coordinates = self.get_board_coordinates()
+        return coordinates.index(coordinate)
+
+    def get_number(self, state):
+        number = -1
+        available_numbers = self.available_numbers(state)
+        while number not in available_numbers:
+            number = int(input(self.get_number_prompt(available_numbers)))
+        return number
+
+    @classmethod
+    def get_number_prompt(cls, available_numbers):
+        return cls.get_prompt('number', available_numbers)
+
     def player(self, state):
         return state.player
+
+    @staticmethod
+    def players():
+        return [Max, Min]
 
     def actions(self, state):
         return [Action(c, n) for c in state.empty_spots for n in self.available_numbers(state)]
