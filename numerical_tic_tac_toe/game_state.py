@@ -29,5 +29,5 @@ class GameState:
         for i, number in enumerate(numbers):
             if i % dimension == 0 and i != 0:
                 string += '\n'
-            string += ' ' + str(number) + ' '
+            string += ' ' + '{:>2}'.format(number) + ' '
         return string

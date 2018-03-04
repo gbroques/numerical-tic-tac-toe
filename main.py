@@ -13,7 +13,11 @@ from numerical_tic_tac_toe import NumericalTicTacToe
 
 def main():
     game = NumericalTicTacToe(dimension=4)
-    game.play()
+    result = game.play()
+    if result == 'draw':
+        print("It's a draw!")
+    else:
+        print(str(result()) + " wins!")
 
 
 if __name__ == '__main__':

@@ -16,7 +16,7 @@ class Player(ABC):
         """Return True if player is Min."""
 
     def __str__(self):
-        return '<{}>'.format(self.name)
+        return '{}'.format(self.name)
 
     def __repr__(self):
         return '<{}>'.format(self.name)

@@ -1,7 +1,7 @@
 from itertools import product
 from math import pow
 from random import randint
-from sys import exit
+from sys import stdout
 
 from adversarial_search import AlphaBetaCutoff
 from adversarial_search import Game
@@ -39,17 +39,16 @@ class NumericalTicTacToe(Game):
         print(state)
         game_mode = self._get_game_mode()
         if game_mode.is_human_vs_computer():
-            self._init_human_vs_computer_loop(state)
+            winner = self._init_human_vs_computer_loop(state)
         else:
-            self._init_computer_vs_computer_loop(state)
+            winner = self._init_computer_vs_computer_loop(state)
+        return winner
 
     @staticmethod
     def _get_game_mode():
         human_vs_computer = ''
         while human_vs_computer.lower() != 'y' and human_vs_computer.lower() != 'n':
-            human_vs_computer = input('Would you like to play? (Y/n) ')
-            if human_vs_computer == '':
-                human_vs_computer = 'y'
+            human_vs_computer = input('Would you like to play? (y/n) ')
         return GameMode.HUMAN_VS_COMPUTER if human_vs_computer.lower() == 'y' else GameMode.COMPUTER_VS_COMPUTER
 
     def _init_human_vs_computer_loop(self, state):
@@ -63,8 +62,9 @@ class NumericalTicTacToe(Game):
                 state = self.result(state, action)
                 print(state)
                 if self.terminal_test(state):
-                    print("Game over!")
-                    exit(0)
+                    if state.is_board_empty():
+                        return 'draw'
+                    return Max if state.player.is_min() else Min
 
     def _init_computer_vs_computer_loop(self, state):
         while True:
@@ -75,16 +75,15 @@ class NumericalTicTacToe(Game):
             state = self.result(state, action)
             print(state)
             if self.terminal_test(state):
-                print("Game over!")
-                exit(0)
+                if state.is_board_empty():
+                    return 'draw'
+                return Max if state.player.is_min() else Min
 
     @staticmethod
     def get_human_player():
         go_first = ''
         while go_first.lower() != 'y' and go_first.lower() != 'n':
-            go_first = input('Would you like to go first? (Y/n) ')
-            if go_first == '':
-                go_first = 'y'
+            go_first = input('Would you like to go first? (y/n) ')
         return Max if go_first.lower() == 'y' else Min
 
     @staticmethod
@@ -113,7 +112,7 @@ class NumericalTicTacToe(Game):
 
     @staticmethod
     def _get_prompt(prompt_for, possible_options):
-        options = ', '.join(str(o) for o in possible_options)
+        options = ', '.join(str(option) for option in possible_options)
         return 'Enter a ' + prompt_for + ' (' + options + '): '
 
     def _map_position_to_coordinate(self, position):
