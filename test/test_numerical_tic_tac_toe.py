@@ -286,6 +286,31 @@ class TestNumericalTicTacToe(unittest.TestCase):
         game = NumericalTicTacToe(dimension=4)
         self.assertEqual(expected_winning_sum, game.winning_sum)
 
+    def test_get_all_possible_wins(self):
+        game = NumericalTicTacToe(dimension=4)
+
+        all_possible_wins = game.get_all_possible_wins()
+
+        self.assertEqual(len(all_possible_wins), 86)
+
+        self.assertIn({1, 15, 2, 16}, all_possible_wins)
+        self.assertIn({1, 4, 14, 15}, all_possible_wins)
+        self.assertIn({1, 7, 10, 16}, all_possible_wins)
+        self.assertIn({2, 6, 11, 15}, all_possible_wins)
+        self.assertIn({4, 5, 12, 13}, all_possible_wins)
+        self.assertIn({3, 8, 9, 14}, all_possible_wins)
+
+    def test_evaluate(self):
+        board = {(0, 0): 2, (0, 1): 0, (0, 2): 0, (0, 3): 0,
+                 (1, 0): 0, (1, 1): 0, (1, 2): 0, (1, 3): 0,
+                 (2, 0): 0, (2, 1): 0, (2, 2): 0, (2, 3): 0,
+                 (3, 0): 0, (3, 1): 0, (3, 2): 0, (3, 3): 0}
+        player = Max
+        state = GameState(board, player)
+        game = NumericalTicTacToe(dimension=4)
+        result = game.evaluate(state)
+        self.assertEqual(result, 24)
+
 
 def get_nearly_complete_board():
     return {(0, 0): 10, (0, 1): 16, (0, 2): 12, (0, 3): 6,

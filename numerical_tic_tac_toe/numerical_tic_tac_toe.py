@@ -1,7 +1,6 @@
+from itertools import combinations
 from itertools import product
 from math import pow
-from random import randint
-from sys import stdout
 
 from adversarial_search import AlphaBetaCutoff
 from adversarial_search import Game
@@ -10,7 +9,7 @@ from .game_mode import GameMode
 from .game_state import GameState
 from .player import Max
 from .player import Min
-
+from random import randint
 
 class NumericalTicTacToe(Game):
     def __init__(self, dimension=4):
@@ -86,9 +85,44 @@ class NumericalTicTacToe(Game):
             go_first = input('Would you like to go first? (y/n) ')
         return Max if go_first.lower() == 'y' else Min
 
-    @staticmethod
-    def evaluate(state):
-        return randint(0, 9)
+    def evaluate(self, state):
+        all_possible_wins = self.get_all_possible_wins()
+        vectors = self.get_board_vectors(state)
+        score = 0
+        for v in vectors:
+            if not self.is_subset(v, all_possible_wins):
+                continue
+            num_even = len([e for e in v if e % 2 == 0 and e != 0])
+            num_odd = len([e for e in v if e % 2 == 1])
+            if (num_odd == 2 and num_even == 2) or (num_odd == 4 and num_even == 0):
+                score += 32
+            if num_odd == 0 and num_even == 4:
+                score -= 32
+            elif num_odd == 1 and num_even == 2:
+                score += 16
+            elif num_odd == 0 and num_even == 1:
+                score += 8
+            elif num_odd == 1 and num_even == 0:
+                score += 4
+            elif num_odd == 1 and num_even == 1:
+                score += 2
+            elif num_odd == 2 and num_even == 1:
+                score += 1
+        return score
+
+    def get_board_vectors(self, state):
+        vectors = []
+        rows = self.get_matrix_from_board(state.board)
+        columns = list(zip(*rows))
+        major_diagonal = [rows[i][i] for i in range(len(rows))]
+        minor_diagonal = [rows[i][~i] for i in range(len(rows))]
+        for e in rows:
+            vectors.append(e)
+        for e in columns:
+            vectors.append(e)
+        vectors.append(major_diagonal)
+        vectors.append(minor_diagonal)
+        return vectors
 
     def _get_user_action(self, state):
         coordinate = self._get_coordinate(state)
@@ -242,3 +276,18 @@ class NumericalTicTacToe(Game):
     def winning_sum(self):
         d = self.dimension
         return d * (d ** 2 + 1) / 2
+
+    def get_all_possible_wins(self):
+        d = self.dimension
+        max_number = d ** 2
+        all_possible_wins = filter(lambda n: sum(n) == self.winning_sum,
+                                   combinations(range(1, max_number + 1), d))
+        return list(map(lambda e: set(e), all_possible_wins))
+
+    @staticmethod
+    def is_subset(vector, all_possible_wins):
+        for win in all_possible_wins:
+            non_zero_vector = set([e for e in vector if e != 0])
+            if non_zero_vector.issubset(win):
+                return True
+        return False
