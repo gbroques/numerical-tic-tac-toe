@@ -12,8 +12,8 @@ from numerical_tic_tac_toe import NumericalTicTacToe
 
 
 def main():
-    game = NumericalTicTacToe(dimension=3)
-    game.play_human_vs_computer()
+    game = NumericalTicTacToe(dimension=4)
+    game.play()
 
 
 if __name__ == '__main__':

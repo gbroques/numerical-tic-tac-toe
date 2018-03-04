@@ -6,6 +6,7 @@ from sys import exit
 from adversarial_search import AlphaBetaCutoff
 from adversarial_search import Game
 from .action import Action
+from .game_mode import GameMode
 from .game_state import GameState
 from .player import Max
 from .player import Min
@@ -33,12 +34,25 @@ class NumericalTicTacToe(Game):
         """
         return list(product(range(self.dimension), repeat=2))
 
-    def play_human_vs_computer(self):
+    def play(self):
         state = self.initial_state
         print(state)
-        self._init_human_vs_player_loop(state)
+        game_mode = self._get_game_mode()
+        if game_mode.is_human_vs_computer():
+            self._init_human_vs_computer_loop(state)
+        else:
+            self._init_computer_vs_computer_loop(state)
 
-    def _init_human_vs_player_loop(self, state):
+    @staticmethod
+    def _get_game_mode():
+        human_vs_computer = ''
+        while human_vs_computer.lower() != 'y' and human_vs_computer.lower() != 'n':
+            human_vs_computer = input('Would you like to play? (Y/n) ')
+            if human_vs_computer == '':
+                human_vs_computer = 'y'
+        return GameMode.HUMAN_VS_COMPUTER if human_vs_computer.lower() == 'y' else GameMode.COMPUTER_VS_COMPUTER
+
+    def _init_human_vs_computer_loop(self, state):
         human_player = self.get_human_player()
         while True:
             for player in self.players():
@@ -51,6 +65,18 @@ class NumericalTicTacToe(Game):
                 if self.terminal_test(state):
                     print("Game over!")
                     exit(0)
+
+    def _init_computer_vs_computer_loop(self, state):
+        while True:
+            enter = '-1'
+            while enter != '':
+                enter = input('Press Enter to continue.')
+            action = AlphaBetaCutoff.search(state, self, eval_fn=self.evaluate)
+            state = self.result(state, action)
+            print(state)
+            if self.terminal_test(state):
+                print("Game over!")
+                exit(0)
 
     @staticmethod
     def get_human_player():

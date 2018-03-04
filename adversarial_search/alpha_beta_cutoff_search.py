@@ -13,20 +13,27 @@ infinity = float('inf')
 
 
 class AlphaBetaCutoff:
-    _cutoff = False
+    _timeout = False
 
     @classmethod
-    def search(cls, state, game, eval_fn=None, cutoff_time=2.0):
-        timer = Timer(cutoff_time, cls._set_cutoff)
+    def search(cls, state, game, eval_fn=None, timeout_duration=2.0):
+        timer = Timer(timeout_duration, cls._set_timeout)
         timer.start()
-        result = cls._search(state, game, d=maxsize, eval_fn=eval_fn)
+        minimax_value = None
+        action = None
+        for i in range(maxsize):
+            try:
+                minimax_value, action = cls._search(state, game, d=i, eval_fn=eval_fn)
+            except TimeoutException:
+                break
         timer.cancel()
-        cls._cutoff = False
-        return result
+        cls._timeout = False
+        print("Minimax Value: " + str(minimax_value))
+        return action
 
     @classmethod
-    def _set_cutoff(cls):
-        cls._cutoff = True
+    def _set_timeout(cls):
+        cls._timeout = True
 
     @classmethod
     def _search(cls, state, game, d=4, cutoff_test=None, eval_fn=None):
@@ -37,7 +44,9 @@ class AlphaBetaCutoff:
 
         # Functions used by alpha beta
         def max_value(state, alpha, beta, depth):
-            if cutoff_test(state, depth):
+            if cls._timeout:
+                raise TimeoutException()
+            elif cutoff_test(state, depth):
                 return eval_fn(state)
             v = -infinity
             for a in game.actions(state):
@@ -49,7 +58,9 @@ class AlphaBetaCutoff:
             return v
 
         def min_value(state, alpha, beta, depth):
-            if cutoff_test(state, depth):
+            if cls._timeout:
+                raise TimeoutException()
+            elif cutoff_test(state, depth):
                 return eval_fn(state)
             v = infinity
             for a in game.actions(state):
@@ -63,11 +74,10 @@ class AlphaBetaCutoff:
         # Body of alpha beta_cutoff_search starts here:
         # The default test cuts off at depth d or at a terminal state
         def is_cutoff(state, depth):
-            return (depth > d or
-                    game.terminal_test(state) or
-                    cls._cutoff)
+            return depth > d or game.terminal_test(state)
 
-        cutoff_test = (cutoff_test or is_cutoff)
+        cutoff_test = cutoff_test or is_cutoff
+
         eval_fn = eval_fn or (lambda state: game.utility(state, player))
         best_score = -infinity
         beta = infinity
@@ -77,5 +87,8 @@ class AlphaBetaCutoff:
             if v > best_score:
                 best_score = v
                 best_action = a
-        print("Minimax Value: " + str(best_score))
-        return best_action
+        return best_score, best_action
+
+
+class TimeoutException(Exception):
+    pass
