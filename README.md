@@ -19,6 +19,44 @@ There's two ways to play:
 
 2. The computer plays itself, talking alternating moves, allowing a human to watch by pressing a key to continue for each successive move.
 
+## Evaluation Function
+Currently the evaluation function separates the board into 10 vectors, scoring each vector individually, and summing each score.
+
+How does it score each board vector?
+First it computes all possible winning vectors, and checks if it is a subset of a winning vector.
+If it's not, then the vector gets 0 points.
+If it is a subset of a winning vector, then the number of even and odd numbers in the vector is computed.
+The worst scenario for Max, 4 even, is given -32 points.
+While the best scenario for Max, 2 odd and 2 even, or 4 odd, is given 32 points.
+Other scenarios are given an appropriate score on a power of 2 scale.
+See the below evaluation function.
+
+```python
+def evaluate(self, state):
+    all_possible_wins = get_all_possible_wins()
+    vectors = get_board_vectors(state)
+    score = 0
+    for v in vectors:
+        if not self.is_subset(v, all_possible_wins):
+            continue
+        num_even = len([e for e in v if e % 2 == 0 and e != 0])
+        num_odd = len([e for e in v if e % 2 == 1])
+        if (num_odd == 2 and num_even == 2) or (num_odd == 4 and num_even == 0):
+            score += 32
+        if num_odd == 0 and num_even == 4:
+            score -= 32
+        elif num_odd == 1 and num_even == 2:
+            score += 16
+        elif num_odd == 0 and num_even == 1:
+            score += 8
+        elif num_odd == 1 and num_even == 0:
+            score += 4
+        elif num_odd == 1 and num_even == 1:
+            score += 2
+        elif num_odd == 2 and num_even == 1:
+            score += 1
+    return score
+```
 
 ## References
 
