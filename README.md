@@ -4,7 +4,7 @@
 
 A numerical tic-tac-toe player written in Python 3 with a 4 x 4 board.
 
-[Numerical Tic-tact-toe board](4x4-numerical-tic-tac-toe.svg)
+![Numerical Tic-tac-toe board](4x4-numerical-tic-tac-toe.svg)
 
 Numerical tic-tac-toe is similar to normal tic-tac-toe, except instead of X's and O's, the two players are given the numbers:
 
